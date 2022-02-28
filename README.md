@@ -17,7 +17,7 @@ $ pip install -r requirements.txt
 To download vulnerability info from [NVD](https://nvd.nist.gov/), execute the following command:
 
 ```bash
-$ python download_cves.py
+$ python 01-download-cves.py
 ```
 
 ## ExploitDB
@@ -25,7 +25,7 @@ $ python download_cves.py
 To download exploit info from [ExploitDB](https://www.exploit-db.com/), execute the following command:
 
 ```bash
-$ python download_exploits.py [parameters...]
+$ python 02-download-exploits.py [parameters...]
 ```
 
 ### Parameters
@@ -37,7 +37,7 @@ $ python download_exploits.py [parameters...]
 To download top weakness info from [Mitre](https://cwe.mitre.org/) and [OWASP](https://owasp.org/www-project-top-ten/), execute the following command:
 
 ```bash
-$ python download_weakness.py
+$ python 03-download-weakness.py
 ```
 
 # Merging data
