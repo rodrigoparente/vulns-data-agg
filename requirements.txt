@@ -1,0 +1,4 @@
+cve_searchsploit
+requests
+bs4
+lxml
