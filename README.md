@@ -42,7 +42,7 @@ $ python 03-download-weakness.py
 
 ## Security Advisory
 
-To download security advisory info from [Microsoft]](https://msrc.microsoft.com/update-guide/en-us), execute the following command:
+To download security advisory info from [Microsoft](https://msrc.microsoft.com/update-guide/en-us), execute the following command:
 
 ```bash
 $ python 04-download-advisories.py
