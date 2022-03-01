@@ -40,14 +40,22 @@ To download top weakness info from [Mitre](https://cwe.mitre.org/) and [OWASP](h
 $ python 03-download-weakness.py
 ```
 
+## Security Advisory
+
+To download security advisory info from [Microsoft]](https://msrc.microsoft.com/update-guide/en-us), execute the following command:
+
+```bash
+$ python 04-download-advisories.py
+```
+
 # Merging data
 
 To merge all different data into a single csv file:
 
 ```bash
-$ python merge_cves_exploits.py
+$ python merge-data.py
 ```
 
 # Output
 
-The result will be a csv file (named `cves_final.csv`) placed in the `output folder`, containing information about all known vulnerabilities, exploits, software and hardware weakness, etc.
+The result will be a csv file (named `vulns.csv`) placed in the `output folder`, containing information about all known vulnerabilities, exploits, security advisories, software and hardware weakness, etc.
