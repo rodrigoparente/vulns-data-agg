@@ -2,3 +2,5 @@ cve_searchsploit
 requests
 bs4
 lxml
+python-dotenv
+pandas

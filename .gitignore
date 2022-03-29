@@ -1,1 +1,6 @@
 datasets/
+keys/
+__pycache__/
+.vscode/
+.ipynb_checkpoints/
+.env
