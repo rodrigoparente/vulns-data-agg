@@ -2,6 +2,7 @@
 import zipfile
 from io import BytesIO
 from urllib.request import urlopen
+from urllib.parse import urljoin
 
 # project imports
 from commons.file import mkdir, rm
@@ -28,12 +29,12 @@ def main(cwe_feed, mitre_csv, owasp_csv, mitre_id, owasp_id):
 
         try:
             feed = soup.find('tr', {'id': f'cwe{id}'}).find('a', string='CSV.zip')
-            url = f"https://cwe.mitre.org/{feed.get('href')}"
+            url = urljoin('https://cwe.mitre.org', feed.get('href'))
 
             with urlopen(url) as response:
                 with zipfile.ZipFile(BytesIO(response.read())) as uncompressed:
                     with open(output, 'wb') as f:
-                        f.write(uncompressed.read(f'{mitre_id}.csv'))
+                        f.write(uncompressed.read(f'{id}.csv'))
         except Exception as e:
             print(f'Could not download file: {e}')
 
