@@ -27,7 +27,7 @@ def save_to_json(path, dict):
         json.dump(dict, file, indent=4)
 
 
-def save_to_csv(path, header, rows):
+def save_list_to_csv(path, header, rows):
     mkdir(path)
     rm(path)
 
@@ -35,3 +35,11 @@ def save_to_csv(path, header, rows):
         writer = csv.writer(file)
         writer.writerow(header)
         writer.writerows(rows)
+
+
+def save_dict_to_csv(path, header, dict):
+    with open(path, 'w') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=header)
+        writer.writeheader()
+        for data in dict.values():
+            writer.writerow(data)
