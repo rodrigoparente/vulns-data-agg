@@ -38,6 +38,9 @@ def save_list_to_csv(path, header, rows):
 
 
 def save_dict_to_csv(path, header, dict):
+    mkdir(path)
+    rm(path)
+
     with open(path, 'w') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=header)
         writer.writeheader()
