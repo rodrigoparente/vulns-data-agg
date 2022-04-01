@@ -19,8 +19,6 @@ log = logging.getLogger(__name__)
 
 def download_adv(base_url, advisory_csv, year_begin, year_end):
 
-    print('Downloading Microsoft Advisory...')
-
     months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun',
               'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
 

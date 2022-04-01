@@ -6,18 +6,18 @@ from adobe import download_adv as adobe_adv
 
 
 def main():
-    print('Download Microsoft advisory...')
+    print('Downloading Microsoft advisory...')
     microsoft_adv(base_url='https://api.msrc.microsoft.com/cvrf/v2.0/cvrf/',
                   advisory_csv='output/microsoft_advisory.csv',
                   year_begin=2017,
                   year_end=2022)
 
-    print('\nDownload Intel advisory...')
+    print('\nDownloading Intel advisory...')
     intel_adv(base_url='https://www.intel.com',
               security_center_url='content/www/us/en/security-center/default.html',
               advisory_csv='output/intel_advisory.csv')
 
-    print('\nDownload Adobe advisory...')
+    print('\nDownloading Adobe advisory...')
     adobe_adv(base_url='https://helpx.adobe.com',
               security_bulletin='security/security-bulletin.html',
               advisory_csv='output/adobe_advisory.csv')

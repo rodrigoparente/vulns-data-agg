@@ -17,8 +17,6 @@ log = logging.getLogger(__name__)
 
 def download_adv(base_url, security_bulletin, advisory_csv):
 
-    print('Downloading Adobe Advisory...')
-
     url = f'{base_url}/{security_bulletin}'
     soup = request_clean_page(url)
 
