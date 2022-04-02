@@ -8,18 +8,23 @@ from feeds.twitter import download_tweets
 
 def main():
     # download info about CVEs
+    print('Downloading CVES...')
     download_cves()
 
     # download info about CWEs
+    print('\nDownloading CWES...')
     download_cwes()
 
     # download info about exploits
+    print('\nDownloading exploits...')
     download_exploits()
 
     # download info about advisories
+    print('\nDownloading advisories...')
     download_advisories()
 
     # download info about CVE
+    print('\nDownloading tweets...')
     download_tweets()
 
 
