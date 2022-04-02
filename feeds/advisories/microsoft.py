@@ -1,8 +1,9 @@
 # python imports
-import json
 import re
+import json
 import logging
 from urllib.parse import urljoin
+from json.decoder import JSONDecodeError
 from dateutil.parser import parse, ParserError
 
 # third-party imports
@@ -33,7 +34,15 @@ def download_microsoft_advisory():
         for month in months:
             url = urljoin(MICROSOFT_BASE_URL, f'{year}-{month}')
             resp = requests.get(url, headers={'Accept': 'application/json'})
-            vulns = json.loads(resp.text).get('Vulnerability')
+
+            if resp.status_code == 404:
+                log.error('\tAPI did not return results.')
+                continue
+
+            try:
+                vulns = json.loads(resp.text).get('Vulnerability')
+            except JSONDecodeError:
+                log.error('\tCould not parse JSON.')
 
             for vuln in vulns:
                 # skip advisory if it doesn't have a CVE-ID
@@ -67,7 +76,7 @@ def download_microsoft_advisory():
                 try:
                     published_date = parse(f'{month} 01, {year}').strftime('%m/%d/%Y')
                 except ParserError:
-                    log.error('Could not parse date.')
+                    log.error('\tCould not parse date.')
                     continue
 
                 impact = MICROSOFT_IMPACT_MAP.get(impacts[0], 'other') if impacts else None
