@@ -1,6 +1,13 @@
 # Vulnerabilities Data Aggregation
 
-The code from this repository can be used to download and correlate information about known vulnerabilities from different security feed sources.
+The code from this repository can be used to download and correlate information about known vulnerabilities from different security feed sources, such as:
+
+ - NIST
+ - MITRE
+ - OWASP
+ - ExploitDB
+ - Multiples Security Advisories (Microsoft, Adobe, Intel, etc)
+ - Twitter
 
 # Requirements
 
@@ -10,50 +17,12 @@ Install requirements using the following command
 $ pip install -r requirements.txt
 ```
 
-# Info Download
+# Execute
 
-## NVD
-
-To download vulnerability info from [NVD](https://nvd.nist.gov/), execute the following command:
+Execute the code using the following command
 
 ```bash
-$ python 01-download-cves.py
-```
-
-## ExploitDB
-
-To download exploit info from [ExploitDB](https://www.exploit-db.com/), execute the following command:
-
-```bash
-$ python 02-download-exploits.py [parameters...]
-```
-
-### Parameters
-
- - `update_db` can be used to update exploits db (might take a while)
-
-## Mitre e OWASP
-
-To download top weakness info from [Mitre](https://cwe.mitre.org/) and [OWASP](https://owasp.org/www-project-top-ten/), execute the following command:
-
-```bash
-$ python 03-download-weakness.py
-```
-
-## Security Advisory
-
-To download security advisory info from [Microsoft](https://msrc.microsoft.com/update-guide/en-us), execute the following command:
-
-```bash
-$ python 04-download-advisories.py
-```
-
-# Merging data
-
-To merge all different data into a single csv file:
-
-```bash
-$ python merge-data.py
+$ python main.py
 ```
 
 # Output
