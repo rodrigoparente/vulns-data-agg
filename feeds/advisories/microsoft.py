@@ -12,11 +12,11 @@ import requests
 from commons.file import save_list_to_csv
 
 # local imports
-from .constants import MICROSOFT_BASE_URL
-from .constants import MICROSOFT_OUTPUT_FILE_PATH
-from .constants import MICROSOFT_IMPACT_MAP
-from .constants import START_YEAR
-from .constants import END_YEAR
+from constants import MICROSOFT_BASE_URL
+from constants import MICROSOFT_OUTPUT_FILE_PATH
+from constants import MICROSOFT_IMPACT_MAP
+from constants import START_YEAR
+from constants import END_YEAR
 
 
 log = logging.getLogger(__name__)
@@ -31,7 +31,7 @@ def download_microsoft_advisory():
 
     for year in range(START_YEAR, END_YEAR):
         for month in months:
-            url = urljoin(MICROSOFT_BASE_URL, '{year}-{month}')
+            url = urljoin(MICROSOFT_BASE_URL, f'{year}-{month}')
             resp = requests.get(url, headers={'Accept': 'application/json'})
             vulns = json.loads(resp.text).get('Vulnerability')
 
