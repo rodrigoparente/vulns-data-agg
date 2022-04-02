@@ -68,7 +68,7 @@ class TwitterStream():
                         http_error_wait *= 2
 
         except Exception as exc:
-            log.error(f'Stream encountered an exception: {exc}')
+            log.error(f'\tStream encountered an exception: {exc}')
         finally:
             self.session.close()
             self.running = False
@@ -141,13 +141,13 @@ class TwitterStream():
         self._connect('GET', url)
 
     def on_connect(self):
-        log.info('Successfull connected to Twitter API.')
+        log.info('\tSuccessfull connected to Twitter API.')
 
     def on_disconnect(self):
-        log.info('Successfull disconnected from Twitter API.')
+        log.info('\tSuccessfull disconnected from Twitter API.')
 
     def on_tweet(self, tweet):
-        log.info('Tweet received.')
+        log.info('\tTweet received.')
 
     def on_error(self, error_msg):
-        log.error(error_msg)
+        log.error(f'\t{error_msg}')

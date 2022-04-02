@@ -44,7 +44,7 @@ def download_cwes():
                     with open(output, 'wb') as f:
                         f.write(uncompressed.read(f'{id}.csv'))
         except Exception as e:
-            log.error(f'Could not download file: {e}')
+            log.error(f'\tCould not download file: {e}')
 
 
 if __name__ == '__main__':

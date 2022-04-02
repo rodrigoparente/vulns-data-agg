@@ -45,14 +45,14 @@ def download_adobe_advisory():
             summary_table = tables[0]
             vuln_details_table = tables[-1]
         except IndexError:
-            log.info('Could not extract info from page.')
+            log.info('\tCould not extract info from page.')
             continue
 
         try:
             summary = extract_table_info(summary_table)[0]
             vuln_details = extract_table_info(vuln_details_table)
         except ParserError:
-            log.error('Could not parse date.')
+            log.error('\tCould not parse date.')
             continue
 
         for vuln in vuln_details:

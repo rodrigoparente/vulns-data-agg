@@ -31,7 +31,7 @@ def download_cves():
                 with GzipFile(fileobj=response) as uncompressed:
                     file = json.loads(uncompressed.read())
         except Exception as e:
-            log.error(f'Could not download json file: {e}')
+            log.error(f'\tCould not download json file: {e}')
 
         for cve in file.get('CVE_Items'):
             id = cve.get('cve').get('CVE_data_meta').get('ID')
@@ -49,13 +49,13 @@ def download_cves():
                 published_date = cve.get('publishedDate')
                 published_date = parse(published_date).strftime('%m/%d/%Y')
             except ParserError:
-                log.error('Error parsing vulnerability published date')
+                log.error('\tError parsing vulnerability published date')
 
             try:
                 modified_date = cve.get('lastModifiedDate')
                 modified_date = parse(modified_date).strftime('%m/%d/%Y')
             except ParserError:
-                log.error('Error parsing vulnerability modification date')
+                log.error('\tError parsing vulnerability modification date')
 
             cves.append([
                 id, cwes, parts, vendors, products,

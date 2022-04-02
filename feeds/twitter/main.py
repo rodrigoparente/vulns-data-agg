@@ -56,7 +56,7 @@ class Listener(TwitterStream):
         start = self.start_time.strftime('%H:%M %d/%m/%Y')
         end = self.end_time.strftime('%H:%M %d/%m/%Y')
 
-        print(f'Program start running at {start} and will finish at {end}')
+        print(f' - Program start running at {start} and will finish at {end}')
 
     def on_tweet(self, tweet):
 
@@ -127,7 +127,7 @@ class Listener(TwitterStream):
             self.disconnect()
 
     def on_error(self, error_msg):
-        print(error_msg)
+        print(f'\t{error_msg}')
 
 
 def download_tweets(rules=SEARCH_RULES, duration=RUNTIME):
