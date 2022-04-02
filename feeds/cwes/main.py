@@ -1,5 +1,6 @@
 # python imports
 import zipfile
+import logging
 from io import BytesIO
 from urllib.request import urlopen
 from urllib.parse import urljoin
@@ -8,15 +9,22 @@ from urllib.parse import urljoin
 from commons.file import mkdir, rm
 from commons.parse import request_clean_page
 
+# local imports
+from .constants import BASE_URL
+from .constants import MITRE_OUTPUT_FILE_PATH
+from .constants import OWASP_OUTPUT_FILE_PATH
+from .constants import MITRE_ID
+from .constants import OWASP_ID
 
-def main(cwe_feed, mitre_csv, owasp_csv, mitre_id, owasp_id):
+log = logging.getLogger(__name__)
 
-    soup = request_clean_page(cwe_feed)
 
-    ids = [mitre_id, owasp_id]
-    outputs = [mitre_csv, owasp_csv]
+def download_cwes():
 
-    print('Downloading files...')
+    soup = request_clean_page(BASE_URL)
+
+    ids = [MITRE_ID, OWASP_ID]
+    outputs = [MITRE_OUTPUT_FILE_PATH, OWASP_OUTPUT_FILE_PATH]
 
     for id, output in zip(ids, outputs):
         # create output folder
@@ -36,12 +44,10 @@ def main(cwe_feed, mitre_csv, owasp_csv, mitre_id, owasp_id):
                     with open(output, 'wb') as f:
                         f.write(uncompressed.read(f'{id}.csv'))
         except Exception as e:
-            print(f'Could not download file: {e}')
+            log.error(f'Could not download file: {e}')
 
 
 if __name__ == '__main__':
-    main(cwe_feed='https://cwe.mitre.org/data/downloads.html',
-         mitre_csv='output/cwe_top_25.csv',
-         owasp_csv='output/owasp_top_10.csv',
-         mitre_id='1337',
-         owasp_id='1344')
+
+    print('\nDownloading CWEs...')
+    download_cwes()
