@@ -68,7 +68,7 @@ class TwitterStream():
                         http_error_wait *= 2
 
         except Exception as exc:
-            print(f'Stream encountered an exception: {exc}')
+            log.error(f'Stream encountered an exception: {exc}')
         finally:
             self.session.close()
             self.running = False
@@ -150,4 +150,4 @@ class TwitterStream():
         log.info('Tweet received.')
 
     def on_error(self, error_msg):
-        log.info('An error occurred.')
+        log.error(error_msg)

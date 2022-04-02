@@ -12,8 +12,12 @@ from dotenv import load_dotenv
 from commons.file import mkdir, rm
 
 # local imports
-from api import TwitterStream
-from utils import process_tweets
+from .constants import RAW_TWEETS_PATH
+from .constants import PROCESSED_TWEETS_PATH
+from .constants import SEARCH_RULES
+from .constants import RUNTIME
+from .api import TwitterStream
+from .utils import process_tweets
 
 
 class Listener(TwitterStream):
@@ -126,7 +130,7 @@ class Listener(TwitterStream):
         print(error_msg)
 
 
-def main(raw_tweets_path, processed_tweets_path, rules, duration):
+def download_tweets(rules=SEARCH_RULES, duration=RUNTIME):
     # take environment
     # variables from .env
     load_dotenv()
@@ -135,7 +139,7 @@ def main(raw_tweets_path, processed_tweets_path, rules, duration):
 
     stream = Listener(
         bearer_token,
-        file_path=raw_tweets_path,
+        file_path=RAW_TWEETS_PATH,
         duration=duration)
 
     stream.add_rules(rules)
@@ -146,12 +150,11 @@ def main(raw_tweets_path, processed_tweets_path, rules, duration):
         tweet_fields=['created_at', 'lang', 'public_metrics', 'text'])
 
     process_tweets(
-        input_path=raw_tweets_path,
-        output_path=processed_tweets_path)
+        input_path=RAW_TWEETS_PATH,
+        output_path=PROCESSED_TWEETS_PATH)
 
 
 if __name__ == '__main__':
-    main(raw_tweets_path='output/raw_tweets.csv',
-         processed_tweets_path='output/tweets.csv',
-         rules=[{'value': 'CVE -"$CVE"', 'tag': 'vulnerability identifier'}],
-         duration={'minutes': 10})
+
+    print('\nDownloading tweets...')
+    download_tweets()
