@@ -2,6 +2,7 @@
 import json
 import re
 import logging
+from urllib.parse import urljoin
 from dateutil.parser import parse, ParserError
 
 # third-party imports
@@ -11,23 +12,26 @@ import requests
 from commons.file import save_list_to_csv
 
 # local imports
-from constants import microsoft_impact_map as impact_map
+from .constants import MICROSOFT_BASE_URL
+from .constants import MICROSOFT_OUTPUT_FILE_PATH
+from .constants import MICROSOFT_IMPACT_MAP
+from .constants import START_YEAR
+from .constants import END_YEAR
 
 
 log = logging.getLogger(__name__)
 
 
-def download_adv(base_url, advisory_csv, year_begin, year_end):
+def download_microsoft_advisory():
 
     months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun',
               'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
 
     entries = list()
 
-    for year in range(year_begin, year_end):
+    for year in range(START_YEAR, END_YEAR):
         for month in months:
-            url = f'{base_url}/{year}-{month}'
-
+            url = urljoin(MICROSOFT_BASE_URL, '{year}-{month}')
             resp = requests.get(url, headers={'Accept': 'application/json'})
             vulns = json.loads(resp.text).get('Vulnerability')
 
@@ -66,7 +70,7 @@ def download_adv(base_url, advisory_csv, year_begin, year_end):
                     log.error('Could not parse date.')
                     continue
 
-                impact = impact_map.get(impacts[0], 'other') if impacts else None
+                impact = MICROSOFT_IMPACT_MAP.get(impacts[0], 'other') if impacts else None
 
                 kb_list = list()
                 for remediation in vuln['Remediations']:
@@ -80,9 +84,7 @@ def download_adv(base_url, advisory_csv, year_begin, year_end):
                     cveID, published_date, public_disclosed,
                     exploited, likelihood, dos, impact, kb_list])
 
-    print('Saving to file...')
-
     header = [
         'cve_id', 'published_date', 'publicly_disclosed', 'exploited',
         'exploitation_likelihood', 'dos', 'impact', 'reference']
-    save_list_to_csv(advisory_csv, header, entries)
+    save_list_to_csv(MICROSOFT_OUTPUT_FILE_PATH, header, entries)

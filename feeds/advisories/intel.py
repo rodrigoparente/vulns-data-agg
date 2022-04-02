@@ -1,5 +1,6 @@
 # python imports
 import re
+from urllib.parse import urljoin
 from dateutil.parser import parse
 
 # project imports
@@ -7,12 +8,15 @@ from commons.file import save_list_to_csv
 from commons.parse import request_clean_page
 
 # local imports
-from constants import intel_impact_map
+from .constants import INTEL_BASE_URL
+from .constants import INTEL_SECURITY_BULLETIN
+from .constants import INTEL_OUTPUT_FILE_PATH
+from .constants import INTEL_IMPACT_MAP
 
 
-def download_adv(base_url, security_center_url, advisory_csv):
+def download_intel_advisory():
 
-    url = f'{base_url}/{security_center_url}'
+    url = urljoin(INTEL_BASE_URL, INTEL_SECURITY_BULLETIN)
     soup = request_clean_page(url)
 
     intel_main_table = soup.find_all('tr', {'class': 'data'})
@@ -26,7 +30,7 @@ def download_adv(base_url, security_center_url, advisory_csv):
 
     for advisory in advisories_url:
 
-        url = f'{base_url}/{advisory}'
+        url = urljoin(INTEL_BASE_URL, advisory)
         soup = request_clean_page(url)
 
         features_table = soup.find('div', {'class': 'editorialtable'})
@@ -36,8 +40,8 @@ def download_adv(base_url, security_center_url, advisory_csv):
         impact = impact.find_all('td')[1].text.split(',')
         impact = [value.strip().rstrip() for value in impact][0]
 
-        if impact in intel_impact_map.keys():
-            impact = intel_impact_map[impact]
+        if impact in INTEL_IMPACT_MAP.keys():
+            impact = INTEL_IMPACT_MAP[impact]
         else:
             impact = 'other'
 
@@ -57,7 +61,5 @@ def download_adv(base_url, security_center_url, advisory_csv):
         for cve in cves:
             advisories_info.append([cve, published_date, impact, intel_sa])
 
-    print('Saving to file...')
-
     header = ['cve_id', 'impact', 'published_date', 'reference']
-    save_list_to_csv(advisory_csv, header, advisories_info)
+    save_list_to_csv(INTEL_OUTPUT_FILE_PATH, header, advisories_info)

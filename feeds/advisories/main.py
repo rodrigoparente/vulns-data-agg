@@ -1,27 +1,22 @@
 
 # local imports
-from microsoft import download_adv as microsoft_adv
-from intel import download_adv as intel_adv
-from adobe import download_adv as adobe_adv
+from .microsoft import download_microsoft_advisory
+from .intel import download_intel_advisory
+from .adobe import download_adobe_advisory
 
 
-def main():
-    print('Downloading Microsoft advisory...')
-    microsoft_adv(base_url='https://api.msrc.microsoft.com/cvrf/v2.0/cvrf/',
-                  advisory_csv='output/microsoft_advisory.csv',
-                  year_begin=2017,
-                  year_end=2022)
+def download_advisories():
+    print(' - Downloading Microsoft advisory...')
+    download_microsoft_advisory()
 
-    print('\nDownloading Intel advisory...')
-    intel_adv(base_url='https://www.intel.com',
-              security_center_url='content/www/us/en/security-center/default.html',
-              advisory_csv='output/intel_advisory.csv')
+    print(' - Downloading Intel advisory...')
+    download_intel_advisory()
 
-    print('\nDownloading Adobe advisory...')
-    adobe_adv(base_url='https://helpx.adobe.com',
-              security_bulletin='security/security-bulletin.html',
-              advisory_csv='output/adobe_advisory.csv')
+    print(' - Downloading Adobe advisory...')
+    download_adobe_advisory()
 
 
 if __name__ == '__main__':
-    main()
+
+    print('\nDownloading advisories...')
+    download_advisories()

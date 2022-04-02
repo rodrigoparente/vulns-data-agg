@@ -1,5 +1,10 @@
 
-microsoft_impact_map = {
+MICROSOFT_BASE_URL = 'https://api.msrc.microsoft.com/cvrf/v2.0/cvrf/'
+MICROSOFT_OUTPUT_FILE_PATH = 'output/microsoft_advisory.csv'
+START_YEAR = 2016
+END_YEAR = 2022
+
+MICROSOFT_IMPACT_MAP = {
     'Remote Code Execution': 'remote code execution',
     'Elevation of Privilege': 'elevation of privilege',
     'Information Disclosure': 'information disclosure',
@@ -10,14 +15,22 @@ microsoft_impact_map = {
     'Defense in Depth': 'defense in depth'
 }
 
-intel_impact_map = {
+INTEL_BASE_URL = 'https://www.intel.com'
+INTEL_SECURITY_BULLETIN = 'content/www/us/en/security-center/default.html'
+INTEL_OUTPUT_FILE_PATH = 'output/intel_advisory.csv'
+
+INTEL_IMPACT_MAP = {
     'Elevation of Privilege': 'elevation of privilege',
     'Escalation of Privilege': 'elevation of privilege',
     'Information Disclosure': 'information disclosure',
     'Denial of Service': 'denial of service'
 }
 
-adobe_impact_map = {
+ADOBE_BASE_URL = 'https://helpx.adobe.com'
+ADOBE_SECURITY_BULLETIN = 'security/security-bulletin.html'
+ADOBE_OUTPUT_FILE_PATH = 'output/adobe_advisory.csv'
+
+ADOBE_IMPACT_MAP = {
     'Remote Code Execution': 'remote code execution',
     'Remote code execution': 'remote code execution',
     'Local Privilege Escalation': 'elevation of privilege',

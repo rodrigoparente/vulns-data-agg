@@ -9,15 +9,18 @@ from commons.file import save_list_to_csv
 from commons.parse import request_clean_page, extract_table_info
 
 # local imports
-from constants import adobe_impact_map
+from .constants import ADOBE_BASE_URL
+from .constants import ADOBE_SECURITY_BULLETIN
+from .constants import ADOBE_OUTPUT_FILE_PATH
+from .constants import ADOBE_IMPACT_MAP
 
 
 log = logging.getLogger(__name__)
 
 
-def download_adv(base_url, security_bulletin, advisory_csv):
+def download_adobe_advisory():
 
-    url = f'{base_url}/{security_bulletin}'
+    url = urljoin(ADOBE_BASE_URL, ADOBE_SECURITY_BULLETIN)
     soup = request_clean_page(url)
 
     advisories_url = list()
@@ -27,7 +30,7 @@ def download_adv(base_url, security_bulletin, advisory_csv):
             href = link.attrs['href']
 
             if 'http' not in href:
-                href = urljoin(base_url, href)
+                href = urljoin(ADOBE_BASE_URL, href)
 
             advisories_url.append(href)
 
@@ -36,7 +39,6 @@ def download_adv(base_url, security_bulletin, advisory_csv):
     for url in advisories_url:
 
         soup = request_clean_page(url)
-
         tables = soup.find_all('table')
 
         try:
@@ -50,7 +52,7 @@ def download_adv(base_url, security_bulletin, advisory_csv):
             summary = extract_table_info(summary_table)[0]
             vuln_details = extract_table_info(vuln_details_table)
         except ParserError:
-            log.info('Could not parse date.')
+            log.error('Could not parse date.')
             continue
 
         for vuln in vuln_details:
@@ -61,8 +63,8 @@ def download_adv(base_url, security_bulletin, advisory_csv):
                 continue
 
             adv_impact = vuln.get('vulnerability_impact')
-            if adv_impact in adobe_impact_map.keys():
-                adv_impact = adobe_impact_map[adv_impact]
+            if adv_impact in ADOBE_IMPACT_MAP.keys():
+                adv_impact = ADOBE_IMPACT_MAP[adv_impact]
             else:
                 adv_impact = 'other'
 
@@ -75,7 +77,5 @@ def download_adv(base_url, security_bulletin, advisory_csv):
                     adv_impact, summary.get('bulletin_id')
                 ])
 
-    print('Saving to file...')
-
     header = ['cve_id', 'published_date', 'impact', 'reference']
-    save_list_to_csv(advisory_csv, header, rows)
+    save_list_to_csv(ADOBE_OUTPUT_FILE_PATH, header, rows)
