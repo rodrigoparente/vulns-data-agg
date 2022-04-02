@@ -9,21 +9,25 @@ from urllib.request import urlopen
 from commons.file import save_list_to_csv
 
 # local imports
-from utils import extract_cwe
-from utils import extract_part_vendor_product
-from utils import extract_metrics
+from .constants import BASE_URL
+from .constants import OUTPUT_FILE_PATH
+from .constants import START_YEAR
+from .constants import END_YEAR
+from .utils import extract_cwe
+from .utils import extract_part_vendor_product
+from .utils import extract_metrics
 
 
 log = logging.getLogger(__name__)
 
 
-def main(json_feed, output_file_path, start_year, end_year):
+def download_cves():
     cves = list()
 
-    for year in range(start_year, end_year):
+    for year in range(START_YEAR, END_YEAR):
 
         try:
-            with urlopen(json_feed.format(year)) as response:
+            with urlopen(BASE_URL.format(year)) as response:
                 with GzipFile(fileobj=response) as uncompressed:
                     file = json.loads(uncompressed.read())
         except Exception as e:
@@ -58,21 +62,16 @@ def main(json_feed, output_file_path, start_year, end_year):
                 *base_metrics.values(),
                 published_date, modified_date])
 
-    print('Saving to file...')
-
     header = [
         "ID", "cwe", "part", "vendor", "product", "cvssType", "attackVector",
         "attackComplexity", "privilegesRequired", "userInteraction", "scope",
         "confidentialityImpact", "integrityImpact", "availabilityImpact",
         "baseScore", "baseSeverity", "exploitabilityScore", "impactScore",
         "publishedDate", "lastModifiedDate"]
-
-    save_list_to_csv(output_file_path, header, cves)
+    save_list_to_csv(OUTPUT_FILE_PATH, header, cves)
 
 
 if __name__ == '__main__':
 
-    main(json_feed='https://nvd.nist.gov/feeds/json/cve/1.1/nvdcve-1.1-{}.json.gz',
-         output_file_path='output/cves.csv',
-         start_year=2016,
-         end_year=2022)
+    print('\nDownloading CVEs...')
+    download_cves()
