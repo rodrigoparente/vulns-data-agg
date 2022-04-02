@@ -12,11 +12,11 @@ import requests
 from commons.file import save_list_to_csv
 
 # local imports
-from constants import MICROSOFT_BASE_URL
-from constants import MICROSOFT_OUTPUT_FILE_PATH
-from constants import MICROSOFT_IMPACT_MAP
-from constants import START_YEAR
-from constants import END_YEAR
+from .constants import MICROSOFT_BASE_URL
+from .constants import MICROSOFT_OUTPUT_FILE_PATH
+from .constants import MICROSOFT_IMPACT_MAP
+from .constants import START_YEAR
+from .constants import END_YEAR
 
 
 log = logging.getLogger(__name__)
