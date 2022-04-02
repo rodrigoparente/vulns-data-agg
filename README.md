@@ -28,3 +28,7 @@ $ python main.py
 # Output
 
 The result will be a csv file (named `vulns.csv`) placed in the `output folder`, containing information about all known vulnerabilities, exploits, security advisories, software and hardware weakness, etc.
+
+# License
+
+This project is [GNU GPLv3 licensed](./LICENSE).
