@@ -14,9 +14,3 @@ def download_advisories():
 
     print(' - Downloading Adobe advisory...')
     download_adobe_advisory()
-
-
-if __name__ == '__main__':
-
-    print('\nDownloading advisories...')
-    download_advisories()

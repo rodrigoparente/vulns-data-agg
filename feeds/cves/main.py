@@ -69,9 +69,3 @@ def download_cves():
         "base_score", "base_severity", "exploitability_score", "impact_score",
         "cve_published_date", "cve_last_modified_date"]
     save_list_to_csv(OUTPUT_FILE_PATH, header, cves)
-
-
-if __name__ == '__main__':
-
-    print('\nDownloading CVEs...')
-    download_cves()

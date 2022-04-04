@@ -1,1 +1,1 @@
-from .main import *  # noqa F401
+from .main import download_cves  # noqa F401

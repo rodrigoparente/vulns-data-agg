@@ -5,9 +5,6 @@ import re
 from datetime import datetime
 from datetime import timedelta
 
-# third-party imports
-from dotenv import load_dotenv
-
 # project imports
 from commons.file import mkdir, rm
 
@@ -131,9 +128,6 @@ class Listener(TwitterStream):
 
 
 def download_tweets(rules=SEARCH_RULES, duration=RUNTIME):
-    # take environment
-    # variables from .env
-    load_dotenv()
 
     bearer_token = os.environ.get('BEARER_TOKEN', None)
 
@@ -152,9 +146,3 @@ def download_tweets(rules=SEARCH_RULES, duration=RUNTIME):
     process_tweets(
         input_path=RAW_TWEETS_PATH,
         output_path=PROCESSED_TWEETS_PATH)
-
-
-if __name__ == '__main__':
-
-    print('\nDownloading tweets...')
-    download_tweets()
