@@ -77,5 +77,5 @@ def download_adobe_advisory():
                     adv_impact, summary.get('bulletin_id')
                 ])
 
-    header = ['cve_id', 'published_date', 'impact', 'reference']
+    header = ['cve_id', 'advisory_published_date', 'impact', 'reference']
     save_list_to_csv(ADOBE_OUTPUT_FILE_PATH, header, rows)

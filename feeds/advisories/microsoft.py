@@ -94,6 +94,6 @@ def download_microsoft_advisory():
                     exploited, likelihood, dos, impact, kb_list])
 
     header = [
-        'cve_id', 'published_date', 'publicly_disclosed', 'exploited',
+        'cve_id', 'advisory_published_date', 'publicly_disclosed', 'exploited',
         'exploitation_likelihood', 'dos', 'impact', 'reference']
     save_list_to_csv(MICROSOFT_OUTPUT_FILE_PATH, header, entries)

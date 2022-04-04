@@ -70,5 +70,6 @@ def process_tweets(input_path, output_path):
             sum(value.get('retweets').values()), sum(value.get('authors').values())
         ])
 
-    header = ['cveID', 'publishedDate', 'impact', 'tweets', 'retweets', 'audience']
+    header = ['cve_id', 'tweet_published_date', 'lang',
+              'impact', 'tweets', 'retweets', 'audience']
     save_list_to_csv(output_path, header, results)
