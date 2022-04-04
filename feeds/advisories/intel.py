@@ -1,7 +1,11 @@
 # python imports
 import re
+import logging
 from urllib.parse import urljoin
 from dateutil.parser import parse
+
+# third-party imports
+from requests.exceptions import ConnectionError
 
 # project imports
 from commons.file import save_list_to_csv
@@ -12,6 +16,9 @@ from .constants import INTEL_BASE_URL
 from .constants import INTEL_SECURITY_BULLETIN
 from .constants import INTEL_OUTPUT_FILE_PATH
 from .constants import INTEL_IMPACT_MAP
+
+
+log = logging.getLogger(__name__)
 
 
 def download_intel_advisory():
@@ -30,8 +37,12 @@ def download_intel_advisory():
 
     for advisory in advisories_url:
 
-        url = urljoin(INTEL_BASE_URL, advisory)
-        soup = request_clean_page(url)
+        try:
+            url = urljoin(INTEL_BASE_URL, advisory)
+            soup = request_clean_page(url)
+        except ConnectionError:
+            log.error('\tFailed to estabilish a new connection.')
+            continue
 
         features_table = soup.find('div', {'class': 'editorialtable'})
 
