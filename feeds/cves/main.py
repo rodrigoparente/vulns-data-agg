@@ -65,7 +65,7 @@ def download_cves():
     header = [
         "cve_id", "cwe", "part", "vendor", "product", "cvss_type", "attack_vector",
         "attack_complexity", "privileges_required", "user_interaction", "scope",
-        "confidentiality_impact", "integrity_iImpact", "availability_impact",
+        "confidentiality_impact", "integrity_impact", "availability_impact",
         "base_score", "base_severity", "exploitability_score", "impact_score",
         "cve_published_date", "cve_last_modified_date"]
     save_list_to_csv(OUTPUT_FILE_PATH, header, cves)
