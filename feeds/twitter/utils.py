@@ -1,8 +1,24 @@
 # third-party imports
 import pandas as pd
 
-# local imports
+# project imports
 from commons.file import save_list_to_csv
+
+# local imports
+from .constants import IMPACT_DICT
+
+
+def find_impact_occurrence(tweet):
+    tweet_text = tweet.lower()
+    impacts = list()
+
+    for key, items in IMPACT_DICT.items():
+        for item in items:
+            result = tweet_text.find(item)
+            if result > 0:
+                impacts.append(key)
+
+    return impacts
 
 
 def process_tweets(input_path, output_path):
@@ -19,6 +35,9 @@ def process_tweets(input_path, output_path):
 
             if row.lang not in tweet['lang']:
                 tweet['lang'].append(row.lang)
+
+            tweet_impact = find_impact_occurrence(row.text)
+            tweet['impact'] += tweet_impact
 
             if row.tweet_author_id not in tweet['authors'].keys():
                 tweet['authors'].update({
@@ -44,7 +63,7 @@ def process_tweets(input_path, output_path):
                 'cve_id': row.cve_id,
                 'published_date': row.published_date,
                 'lang': [row.lang],
-                'impact': [],
+                'impact': find_impact_occurrence(row.text),
                 'authors': {row.tweet_author_id: row.tweet_author_followers},
                 'tweets': [],
                 'retweets': {}
@@ -64,9 +83,16 @@ def process_tweets(input_path, output_path):
 
     results = list()
     for key, value in tweets_dict.items():
+
+        # obtaining the vulnerability impact
+        impact = None
+        tweet_impact = value.get('impact')
+        if tweet_impact:
+            impact = max(set(tweet_impact), key=tweet_impact.count)
+
         results.append([
-            value.get('cve_id'), value.get('published_date'), value.get('lang'),
-            value.get('impact'), len(value.get('tweets')),
+            value.get('cve_id'), value.get('published_date'),
+            value.get('lang'), impact, len(value.get('tweets')),
             sum(value.get('retweets').values()), sum(value.get('authors').values())
         ])
 
