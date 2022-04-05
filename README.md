@@ -6,6 +6,7 @@ The code from this repository can be used to download and correlate information 
  - MITRE
  - OWASP
  - ExploitDB
+ - EPSS
  - Multiples Security Advisories (Microsoft, Adobe, Intel, etc)
  - Twitter
 
