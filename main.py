@@ -2,8 +2,8 @@
 from dotenv import load_dotenv
 
 # local imports
-from .download import download_security_feeds
-from .process import process_security_feeds
+from download import download_security_feeds
+from process import process_security_feeds
 
 
 if __name__ == '__main__':

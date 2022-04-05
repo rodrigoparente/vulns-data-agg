@@ -84,7 +84,7 @@ def process_security_feeds():
     advisories = pd.concat([microsoft_advisory, intel_advisory, adobe_advisory])
     advisories = advisories.drop_duplicates(subset=['cve_id'])
 
-    columns = ['cve_id', 'advisory_published_date', 'impact', 'reference']
+    columns = ['cve_id', 'advisory_published_date', 'attack_type', 'reference']
     cves = cves.merge(advisories[columns], how='left', on='cve_id')
 
     cves['updatable'] = cves['reference'].apply(lambda value: 1 if value else 0)
@@ -108,7 +108,7 @@ def process_security_feeds():
 
     for row in tweets.itertuples():
         cve_index = cves.loc[cves['cve_id'] == row.cve_id].index
-        cves.loc[cve_index, 'impact'] = row.impact
+        cves.loc[cve_index, 'attack_type'] = row.attack_type
 
     # formating output
 
@@ -166,7 +166,7 @@ def process_security_feeds():
         'cve_id', 'part', 'vendor', 'base_score', 'confidentiality_impact', 'integrity_impact',
         'availability_impact', 'cve_published_date', 'cve_published_days', 'mitre_top_25',
         'owasp_top_10', 'exploit_count', 'epss', 'exploit_published_date', 'exploit_published_days',
-        'impact', 'updatable', 'audience', 'audience_percentile'
+        'attack_type', 'updatable', 'audience', 'audience_percentile'
     ]]
 
     return cves

@@ -36,8 +36,8 @@ def process_tweets(input_path, output_path):
             if row.lang not in tweet['lang']:
                 tweet['lang'].append(row.lang)
 
-            tweet_impact = find_impact_occurrence(row.text)
-            tweet['impact'] += tweet_impact
+            tweet_attack_type = find_impact_occurrence(row.text)
+            tweet['attack_type'] += tweet_attack_type
 
             if row.tweet_author_id not in tweet['authors'].keys():
                 tweet['authors'].update({
@@ -63,7 +63,7 @@ def process_tweets(input_path, output_path):
                 'cve_id': row.cve_id,
                 'published_date': row.published_date,
                 'lang': [row.lang],
-                'impact': find_impact_occurrence(row.text),
+                'attack_type': find_impact_occurrence(row.text),
                 'authors': {row.tweet_author_id: row.tweet_author_followers},
                 'tweets': [],
                 'retweets': {}
@@ -86,9 +86,9 @@ def process_tweets(input_path, output_path):
 
         # obtaining the vulnerability impact
         impact = None
-        tweet_impact = value.get('impact')
-        if tweet_impact:
-            impact = max(set(tweet_impact), key=tweet_impact.count)
+        tweet_attack_type = value.get('attack_type')
+        if tweet_attack_type:
+            impact = max(set(tweet_attack_type), key=tweet_attack_type.count)
 
         results.append([
             value.get('cve_id'), value.get('published_date'),
@@ -97,5 +97,5 @@ def process_tweets(input_path, output_path):
         ])
 
     header = ['cve_id', 'tweet_published_date', 'lang',
-              'impact', 'tweets', 'retweets', 'audience']
+              'attack_type', 'tweets', 'retweets', 'audience']
     save_list_to_csv(output_path, header, results)
