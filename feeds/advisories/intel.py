@@ -70,7 +70,7 @@ def download_intel_advisory():
         intel_sa = re.search('intel-sa-[0-9]+', url).group(0).upper()
 
         for cve in cves:
-            advisories_info.append([cve, published_date, impact, intel_sa])
+            advisories_info.append([cve, published_date, impact, [intel_sa]])
 
     header = ['cve_id', 'advisory_published_date', 'attack_type', 'reference']
     save_list_to_csv(INTEL_OUTPUT_FILE_PATH, header, advisories_info)

@@ -74,7 +74,7 @@ def download_adobe_advisory():
             for cve_id in cve_list:
                 rows.append([
                     cve_id, summary.get('date_published'),
-                    adv_impact, summary.get('bulletin_id')
+                    adv_impact, [summary.get('bulletin_id')]
                 ])
 
     header = ['cve_id', 'advisory_published_date', 'attack_type', 'reference']

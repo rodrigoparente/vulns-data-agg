@@ -8,6 +8,7 @@ from dateutil.parser import parse, ParserError
 
 # third-party imports
 import requests
+import numpy as np
 
 # project imports
 from commons.file import save_list_to_csv
@@ -88,6 +89,7 @@ def download_microsoft_advisory():
                         if knowledge:
                             kb_list.append(knowledge.group(0))
                 kb_list = list(set(kb_list))
+                kb_list = kb_list if kb_list else np.nan
 
                 entries.append([
                     cveID, published_date, public_disclosed,
