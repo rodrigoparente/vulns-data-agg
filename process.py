@@ -7,6 +7,8 @@ import numpy as np
 
 
 def process_security_feeds():
+    print('\nProcessing output files...')
+
     cves = pd.read_csv('output/cves.csv')
     cves = cves.drop_duplicates(subset=['cve_id'])
 
@@ -87,7 +89,8 @@ def process_security_feeds():
     columns = ['cve_id', 'advisory_published_date', 'attack_type', 'reference']
     cves = cves.merge(advisories[columns], how='left', on='cve_id')
 
-    cves['updatable'] = cves['reference'].apply(lambda value: 1 if value else 0)
+    cves['update_available'] = 0
+    cves.loc[~cves['reference'].isnull(), 'update_available'] = 1
 
     # merging tweets
 
@@ -137,14 +140,23 @@ def process_security_feeds():
                 curr_vendor = vendor
         vendors.append(curr_vendor)
 
-        cve_date = (datetime.now() - row[18]).days
-        exploit_date = (datetime.now() - row[23]).days
+        try:
+            cve_date = (datetime.now() - row[18]).days
+        except TypeError:
+            cve_date = 0
+
+        try:
+            exploit_date = (datetime.now() - row[24]).days
+        except TypeError:
+            exploit_date = 0
 
         raw_days = [cve_date, exploit_date]
         human_readable_days = [cves_days, exploits_days]
 
         for date, result in zip(raw_days, human_readable_days):
-            if date <= 60:
+            if date == 0:
+                result.append(np.nan)
+            elif date <= 60:
                 result.append('menos de 3 meses')
             elif 60 < date <= 180:
                 result.append('entre 3 e 6 meses')
@@ -159,14 +171,15 @@ def process_security_feeds():
 
     cves['part'] = parts
     cves['vendor'] = vendors
-    cves['cve_published_days'] = cves_days
-    cves['exploit_published_days'] = exploits_days
+    cves['readable_cve_date'] = cves_days
+    cves['readable_exploit_date'] = exploits_days
 
     cves = cves[[
-        'cve_id', 'part', 'vendor', 'base_score', 'confidentiality_impact', 'integrity_impact',
-        'availability_impact', 'cve_published_date', 'cve_published_days', 'mitre_top_25',
-        'owasp_top_10', 'exploit_count', 'epss', 'exploit_published_date', 'exploit_published_days',
-        'attack_type', 'updatable', 'audience', 'audience_percentile'
+        'cve_id', 'part', 'vendor', 'base_score', 'cvss_type', 'confidentiality_impact',
+        'integrity_impact', 'availability_impact', 'cve_published_date', 'readable_cve_date',
+        'mitre_top_25', 'owasp_top_10', 'exploit_count', 'epss', 'exploit_published_date',
+        'readable_exploit_date', 'attack_type', 'reference', 'update_available', 'audience',
+        'audience_percentile'
     ]]
 
     return cves
