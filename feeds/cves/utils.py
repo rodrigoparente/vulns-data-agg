@@ -1,3 +1,7 @@
+# project imports
+from commons.impact import extract_vuln_impact
+
+
 def extract_and(children):
     parts = list()
     vendors = list()
@@ -70,6 +74,16 @@ def extract_part_vendor_product(nodes):
                 parts, vendors, products = extract_or(cpe_match)
 
     return list(set(parts)), list(set(vendors)), list(set(products))
+
+
+def extract_attacks(cve):
+    descriptions = cve.get('description_data')
+
+    attack_list = list()
+    for desc in descriptions:
+        attack_list += extract_vuln_impact(desc.get('value'))
+
+    return list(set(attack_list))
 
 
 def extract_cwe(cve):

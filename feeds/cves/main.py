@@ -13,6 +13,7 @@ from .constants import BASE_URL
 from .constants import OUTPUT_FILE_PATH
 from .constants import START_YEAR
 from .constants import END_YEAR
+from .utils import extract_attacks
 from .utils import extract_cwe
 from .utils import extract_part_vendor_product
 from .utils import extract_metrics
@@ -35,6 +36,10 @@ def download_cves():
 
         for cve in file.get('CVE_Items'):
             id = cve.get('cve').get('CVE_data_meta').get('ID')
+
+            description_data = cve.get('cve').get('description')
+            attacks = extract_attacks(description_data)
+            attacks = attacks if attacks else None
 
             problem_type = cve.get('cve').get('problemtype')
             cwes = extract_cwe(problem_type)
@@ -59,7 +64,7 @@ def download_cves():
 
             cves.append([
                 id, cwes, parts, vendors, products,
-                *base_metrics.values(),
+                *base_metrics.values(), attacks,
                 published_date, modified_date])
 
     header = [
@@ -67,5 +72,5 @@ def download_cves():
         "attack_complexity", "privileges_required", "user_interaction", "scope",
         "confidentiality_impact", "integrity_impact", "availability_impact",
         "base_score", "base_severity", "exploitability_score", "impact_score",
-        "cve_published_date", "cve_last_modified_date"]
+        "attack_type", "cve_published_date", "cve_last_modified_date"]
     save_list_to_csv(OUTPUT_FILE_PATH, header, cves)
