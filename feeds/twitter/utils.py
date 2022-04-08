@@ -84,15 +84,12 @@ def process_tweets(input_path, output_path):
     results = list()
     for key, value in tweets_dict.items():
 
-        # obtaining the vulnerability impact
-        impact = None
-        tweet_attack_type = value.get('attack_type')
-        if tweet_attack_type:
-            impact = max(set(tweet_attack_type), key=tweet_attack_type.count)
+        impact_list = list(set(value.get('attack_type')))
+        impact_list = impact_list if impact_list else None
 
         results.append([
-            value.get('cve_id'), value.get('published_date'),
-            value.get('lang'), impact, len(value.get('tweets')),
+            value.get('cve_id'), value.get('published_date'), value.get('lang'),
+            impact_list, len(value.get('tweets')),
             sum(value.get('retweets').values()), sum(value.get('authors').values())
         ])
 

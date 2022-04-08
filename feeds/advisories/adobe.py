@@ -68,13 +68,17 @@ def download_adobe_advisory():
             else:
                 adv_impact = 'other'
 
+            impact = vuln.get('vulnerability_impact')
+            impact_list = [ADOBE_IMPACT_MAP.get(impact, 'other')]
+            impact_list = list(set(impact_list)) if impact else None
+
             cve_list = re.split(r'\n+|\s+|,', vuln.get('cve_number'))
             cve_list = list(filter(None, cve_list))
 
             for cve_id in cve_list:
                 rows.append([
                     cve_id, summary.get('date_published'),
-                    adv_impact, [summary.get('bulletin_id')]
+                    impact_list, [summary.get('bulletin_id')]
                 ])
 
     header = ['cve_id', 'advisory_published_date', 'attack_type', 'reference']

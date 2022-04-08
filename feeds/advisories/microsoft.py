@@ -80,7 +80,12 @@ def download_microsoft_advisory():
                     log.error('\tCould not parse date.')
                     continue
 
-                impact = MICROSOFT_IMPACT_MAP.get(impacts[0], 'other') if impacts else None
+                impact_list = list()
+                for impact in impacts:
+                    impact_list.append(
+                        MICROSOFT_IMPACT_MAP.get(impact, 'other'))
+
+                impact_list = list(set(impact_list)) if impact_list else None
 
                 kb_list = list()
                 for remediation in vuln['Remediations']:
@@ -93,7 +98,7 @@ def download_microsoft_advisory():
 
                 entries.append([
                     cveID, published_date, public_disclosed,
-                    exploited, likelihood, dos, impact, kb_list])
+                    exploited, likelihood, dos, impact_list, kb_list])
 
     header = [
         'cve_id', 'advisory_published_date', 'publicly_disclosed', 'exploited',

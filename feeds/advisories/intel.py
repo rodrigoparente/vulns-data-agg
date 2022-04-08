@@ -46,15 +46,17 @@ def download_intel_advisory():
 
         features_table = soup.find('div', {'class': 'editorialtable'})
 
-        _, impact, _, published_date, *_ = features_table.find_all('tr', {'class': 'data'})
+        _, impacts, _, published_date, *_ = features_table.find_all('tr', {'class': 'data'})
 
-        impact = impact.find_all('td')[1].text.split(',')
-        impact = [value.strip().rstrip() for value in impact][0]
+        impacts = impacts.find_all('td')[1].text.split(',')
+        impacts = [value.strip().rstrip() for value in impacts]
 
-        if impact in INTEL_IMPACT_MAP.keys():
-            impact = INTEL_IMPACT_MAP[impact]
-        else:
-            impact = 'other'
+        impact_list = list()
+        for impact in impacts:
+            impact_list.append(
+                INTEL_IMPACT_MAP.get(impact, 'other'))
+
+        impact_list = list(set(impact_list)) if impact_list else None
 
         published_date = published_date.find_all('td')[1].text.strip().rstrip()
         published_date = parse(published_date).strftime('%m/%d/%Y')
@@ -70,7 +72,7 @@ def download_intel_advisory():
         intel_sa = re.search('intel-sa-[0-9]+', url).group(0).upper()
 
         for cve in cves:
-            advisories_info.append([cve, published_date, impact, [intel_sa]])
+            advisories_info.append([cve, published_date, impact_list, [intel_sa]])
 
     header = ['cve_id', 'advisory_published_date', 'attack_type', 'reference']
     save_list_to_csv(INTEL_OUTPUT_FILE_PATH, header, advisories_info)
