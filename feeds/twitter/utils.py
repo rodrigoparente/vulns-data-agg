@@ -3,22 +3,7 @@ import pandas as pd
 
 # project imports
 from commons.file import save_list_to_csv
-
-# local imports
-from .constants import IMPACT_DICT
-
-
-def find_impact_occurrence(tweet):
-    tweet_text = tweet.lower()
-    impacts = list()
-
-    for key, items in IMPACT_DICT.items():
-        for item in items:
-            result = tweet_text.find(item)
-            if result > 0:
-                impacts.append(key)
-
-    return impacts
+from commons.impact import extract_vuln_impact
 
 
 def process_tweets(input_path, output_path):
@@ -36,7 +21,7 @@ def process_tweets(input_path, output_path):
             if row.lang not in tweet['lang']:
                 tweet['lang'].append(row.lang)
 
-            tweet_attack_type = find_impact_occurrence(row.text)
+            tweet_attack_type = extract_vuln_impact(row.text)
             tweet['attack_type'] += tweet_attack_type
 
             if row.tweet_author_id not in tweet['authors'].keys():
@@ -63,7 +48,7 @@ def process_tweets(input_path, output_path):
                 'cve_id': row.cve_id,
                 'published_date': row.published_date,
                 'lang': [row.lang],
-                'attack_type': find_impact_occurrence(row.text),
+                'attack_type': extract_vuln_impact(row.text),
                 'authors': {row.tweet_author_id: row.tweet_author_followers},
                 'tweets': [],
                 'retweets': {}
@@ -82,7 +67,7 @@ def process_tweets(input_path, output_path):
                 tweet['tweets'].append(row.tweet_id)
 
     results = list()
-    for key, value in tweets_dict.items():
+    for value in tweets_dict.values():
 
         impact_list = list(set(value.get('attack_type')))
         impact_list = impact_list if impact_list else None
