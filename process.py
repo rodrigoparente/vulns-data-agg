@@ -86,8 +86,12 @@ def process_security_feeds():
     advisories = pd.concat([microsoft_advisory, intel_advisory, adobe_advisory])
     advisories = advisories.drop_duplicates(subset=['cve_id'])
 
-    columns = ['cve_id', 'advisory_published_date', 'attack_type', 'reference']
+    columns = ['cve_id', 'advisory_published_date', 'reference']
     cves = cves.merge(advisories[columns], how='left', on='cve_id')
+
+    for row in advisories.itertuples():
+        cve_index = cves.loc[cves['cve_id'] == row.cve_id].index
+        cves.loc[cve_index, 'attack_type'] = row.attack_type
 
     cves['update_available'] = 0
     cves.loc[~cves['reference'].isnull(), 'update_available'] = 1
