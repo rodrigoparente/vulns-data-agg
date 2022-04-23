@@ -145,7 +145,7 @@ def process_security_feeds():
         vendors.append(curr_vendor)
 
         try:
-            cve_date = (datetime.now() - row[18]).days
+            cve_date = (datetime.now() - row[19]).days
         except TypeError:
             cve_date = 0
 
@@ -158,9 +158,7 @@ def process_security_feeds():
         human_readable_days = [cves_days, exploits_days]
 
         for date, result in zip(raw_days, human_readable_days):
-            if date == 0:
-                result.append(np.nan)
-            elif date <= 60:
+            if 0 < date <= 60:
                 result.append('menos de 3 meses')
             elif 60 < date <= 180:
                 result.append('entre 3 e 6 meses')
@@ -179,11 +177,14 @@ def process_security_feeds():
     cves['readable_exploit_date'] = exploits_days
 
     cves = cves[[
-        'cve_id', 'part', 'vendor', 'base_score', 'cvss_type', 'confidentiality_impact',
-        'integrity_impact', 'availability_impact', 'cve_published_date', 'readable_cve_date',
-        'mitre_top_25', 'owasp_top_10', 'exploit_count', 'epss', 'exploit_published_date',
-        'readable_exploit_date', 'attack_type', 'reference', 'update_available', 'audience',
-        'audience_percentile'
+        'cve_id', 'cwe', 'part', 'vendor', 'product', 'cvss_type', 'attack_vector',
+        'attack_complexity', 'privileges_required', 'user_interaction', 'scope',
+        'confidentiality_impact', 'integrity_impact', 'availability_impact', 'base_score',
+        'base_severity', 'exploitability_score', 'impact_score', 'cve_published_date',
+        'readable_cve_date', 'cve_last_modified_date', 'mitre_top_25', 'owasp_top_10',
+        'exploit_name', 'exploit_published_date', 'readable_exploit_date', 'exploit_type',
+        'exploit_platform', 'exploit_count', 'attack_type', 'epss', 'advisory_published_date',
+        'reference', 'update_available', 'audience', 'audience_percentile'
     ]]
 
     return cves
