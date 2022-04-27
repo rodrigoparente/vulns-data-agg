@@ -1,6 +1,6 @@
 # python imports
-import time
 import random
+from time import sleep
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
@@ -144,15 +144,31 @@ def get_interest(vulns):
     a_week_days_ago = (datetime.now() - relativedelta(days=7, hours=1)).strftime('%Y-%m-%dT%H')
 
     interests, trends = list(), list()
-    last_progress_value = -1
+
+    error_limit = 0
+    max_error_limit = 5
+    error_wait_time = 60
 
     # retrieving interest of all vulns
-    for index, row in enumerate(zip(*vulns.to_dict("list").values())):
+    for row in zip(*vulns.to_dict("list").values()):
         cve = row[0]
 
-        # building trend query
-        pytrends.build_payload([cve], timeframe=f'{a_week_days_ago} {today}')
-        df = pytrends.interest_over_time()
+        df = None
+
+        while True:
+            try:
+                # building trend query
+                pytrends.build_payload([cve], timeframe=f'{a_week_days_ago} {today}')
+                df = pytrends.interest_over_time()
+                break
+            except Exception as e:
+                if error_limit > max_error_limit:
+                    print(f'Program failed: {e}')
+                    exit(0)
+
+                sleep(error_wait_time)
+                error_limit += 1
+                error_wait_time *= 2
 
         trend, interest = np.nan, 0
 
@@ -185,12 +201,6 @@ def get_interest(vulns):
 
         trends.append(trend)
         interests.append(interest)
-
-        progress = round(index / vulns.shape[0] * 100)
-        if progress % 20 == 0 and\
-                progress != last_progress_value:
-            time.sleep(120)
-            last_progress_value = progress
 
     vulns['google_trend'] = trends
     vulns['google_interest'] = interests
