@@ -107,10 +107,10 @@ def process_security_feeds():
     tweets = tweets.loc[tweets['cve_id'].isin(intersection)]
 
     max_audience = tweets['audience'].max()
-    tweets['audience_percentile'] =\
+    tweets['audience_normalized'] =\
         tweets['audience'].apply(lambda value: f'{value / max_audience:.5f}')
 
-    columns = ['cve_id', 'audience', 'audience_percentile']
+    columns = ['cve_id', 'audience', 'audience_normalized']
     cves = cves.merge(tweets[columns], how='left', on='cve_id')
 
     for row in tweets.itertuples():
@@ -184,7 +184,7 @@ def process_security_feeds():
         'readable_cve_date', 'cve_last_modified_date', 'mitre_top_25', 'owasp_top_10',
         'exploit_name', 'exploit_published_date', 'readable_exploit_date', 'exploit_type',
         'exploit_platform', 'exploit_count', 'attack_type', 'epss', 'advisory_published_date',
-        'reference', 'update_available', 'audience', 'audience_percentile'
+        'reference', 'update_available', 'audience', 'audience_normalized'
     ]]
 
     return cves
