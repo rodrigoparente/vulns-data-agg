@@ -93,25 +93,35 @@ def generate_network(vulns):
 
     # asset context
     asset_ctx = [
-        ['DMZ', 'SERVER', 'PRODUCTION', np.nan, 1, np.nan],
-        ['DMZ', 'SERVER', 'PRODUCTION', np.nan, 0, np.nan],
-        ['LOCAL', 'SERVER', 'PRODUCTION', 'CUSTOMERS', 1, np.nan],
-        ['LOCAL', 'SERVER', 'PRODUCTION', 'CUSTOMERS', 0, np.nan],
-        ['LOCAL', 'SERVER', 'PRODUCTION', 'EMPLOYEES', 1, 1],
-        ['LOCAL', 'SERVER', 'PRODUCTION', 'EMPLOYEES', 1, 0],
-        ['LOCAL', 'SERVER', 'PRODUCTION', 'EMPLOYEES', 0, 1],
-        ['LOCAL', 'SERVER', 'PRODUCTION', 'EMPLOYEES', 0, 0],
-        ['LOCAL', 'SERVER', 'DEVELOPMENT', np.nan, 1, np.nan],
-        ['LOCAL', 'SERVER', 'DEVELOPMENT', np.nan, 0, np.nan],
-        ['LOCAL', 'WORKSTATION', 'PRODUCTION', np.nan, 1, 1],
-        ['LOCAL', 'WORKSTATION', 'PRODUCTION', np.nan, 1, 0],
-        ['LOCAL', 'WORKSTATION', 'PRODUCTION', np.nan, 0, 1],
-        ['LOCAL', 'WORKSTATION', 'PRODUCTION', np.nan, 0, 0],
-        ['LOCAL', 'WORKSTATION', 'DEVELOPMENT', np.nan, 1, np.nan],
-        ['LOCAL', 'WORKSTATION', 'DEVELOPMENT', np.nan, 0, np.nan],
+        ['DMZ', 'SERVER', 'PRODUCTION', 0, 1, 0],
+        ['DMZ', 'SERVER', 'PRODUCTION', 0, 0, 0],
+        ['LOCAL', 'SERVER', 'PRODUCTION', 1, 1, 1],
+        ['LOCAL', 'SERVER', 'PRODUCTION', 1, 1, 0],
+        ['LOCAL', 'SERVER', 'PRODUCTION', 1, 0, 1],
+        ['LOCAL', 'SERVER', 'PRODUCTION', 1, 0, 0],
+        ['LOCAL', 'SERVER', 'PRODUCTION', 0, 1, 1],
+        ['LOCAL', 'SERVER', 'PRODUCTION', 0, 1, 0],
+        ['LOCAL', 'SERVER', 'PRODUCTION', 0, 0, 1],
+        ['LOCAL', 'SERVER', 'PRODUCTION', 0, 0, 0],
+        ['LOCAL', 'SERVER', 'DEVELOPMENT', 1, 1, 0],
+        ['LOCAL', 'SERVER', 'DEVELOPMENT', 1, 0, 0],
+        ['LOCAL', 'SERVER', 'DEVELOPMENT', 0, 1, 0],
+        ['LOCAL', 'SERVER', 'DEVELOPMENT', 0, 0, 0],
+        ['LOCAL', 'WORKSTATION', 'PRODUCTION', 1, 1, 1]
+        ['LOCAL', 'WORKSTATION', 'PRODUCTION', 1, 1, 0]
+        ['LOCAL', 'WORKSTATION', 'PRODUCTION', 1, 0, 1]
+        ['LOCAL', 'WORKSTATION', 'PRODUCTION', 1, 0, 0]
+        ['LOCAL', 'WORKSTATION', 'PRODUCTION', 0, 1, 1]
+        ['LOCAL', 'WORKSTATION', 'PRODUCTION', 0, 1, 0]
+        ['LOCAL', 'WORKSTATION', 'PRODUCTION', 0, 0, 1]
+        ['LOCAL', 'WORKSTATION', 'PRODUCTION', 0, 0, 0]
+        ['LOCAL', 'WORKSTATION', 'DEVELOPMENT', 0, 1, 0],
+        ['LOCAL', 'WORKSTATION', 'DEVELOPMENT', 0, 0, 0],
     ]
 
-    asset_ctx_cols = ['topology', 'type', 'environment', 'data', 'end_of_life', 'honeypot']
+    asset_ctx_cols = [
+        'topology', 'asset_type', 'environment',
+        'sensitive_data', 'end_of_life', 'honeypot']
 
     # columns of the final dataset
     output_columns = vulns.columns.tolist() + asset_ctx_cols
@@ -236,11 +246,11 @@ if __name__ == '__main__':
 
     columns = [
         'cve_id', 'part', 'vendor', 'base_score', 'confidentiality_impact', 'integrity_impact',
-        'availability_impact', 'cve_published_date', 'readable_cve_date', 'mitre_top_25',
-        'owasp_top_10', 'exploit_count', 'epss', 'exploit_published_date',
-        'readable_exploit_date', 'attack_type', 'reference', 'update_available', 'audience',
-        'audience_percentile', 'google_trend', 'google_interest', 'topology', 'type',
-        'environment', 'data', 'end_of_life', 'honeypot'
+        'availability_impact', 'cve_published_date', 'readable_cve_date', 'reference',
+        'update_available', 'mitre_top_25', 'owasp_top_10',  'exploit_count', 'epss',
+        'exploit_published_date', 'readable_exploit_date', 'attack_type', 'audience',
+        'audience_normalized', 'google_trend', 'google_interest', 'topology', 'asset_type',
+        'environment', 'sensitive_data', 'end_of_life', 'honeypot'
     ]
 
     # filtering columns
